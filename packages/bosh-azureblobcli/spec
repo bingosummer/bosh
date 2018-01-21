@@ -1,0 +1,4 @@
+---
+name: bosh-azureblobcli
+files:
+- bosh-azureblobcli/bosh-azureblobcli-*-linux-amd64

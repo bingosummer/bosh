@@ -230,6 +230,13 @@ elsif p('blobstore.provider') == 'gcs'
   if_p('blobstore.encryption_key') do |encryption_key|
      blobstore_options['encryption_key'] = encryption_key
   end
+elsif p('blobstore.provider') == 'azureblob'
+    blobstore_options = {
+    'bucket_name' => p('blobstore.bucket_name'),
+    'credentials_source' => p('blobstore.credentials_source', 'static'),
+    'storage_account_name' => p('blobstore.storage_account_name', nil),
+    'storage_account_access_key' => p('blobstore.storage_account_access_key', nil),
+  }
 else
   blobstore_options = {
     'endpoint' => "https://#{p('blobstore.address')}:#{p('blobstore.port')}",
@@ -262,6 +269,12 @@ if p('blobstore.provider') == "gcs"
    params['blobstore']['provider'] = "gcscli"
    params['blobstore']['options']['gcscli_config_path'] = "/var/vcap/data/director/tmp"
    params['blobstore']['options']['gcscli_path'] = "/var/vcap/packages/bosh-gcscli/bin/bosh-gcscli"
+end
+
+if p('blobstore.provider') == "azureblob"
+   params['blobstore']['provider'] = "azureblobcli"
+   params['blobstore']['options']['azureblobcli_config_path'] = "/var/vcap/data/tmp/director"
+   params['blobstore']['options']['azureblobcli_path'] = "/var/vcap/packages/bosh-azureblobcli/bin/bosh-azureblobcli"
 end
 
 if p('blobstore.provider') == "dav"
@@ -379,6 +392,18 @@ if_p('compiled_package_cache.options.bucket_name') do |bucket_name|
     if_p('compiled_package_cache.options.encryption_key') do |encryption_key|
       options['encryption_key'] = encryption_key
     end
+  end
+
+  if p('compiled_package_cache.provider') == 'azureblob'
+    params['compiled_package_cache'] = {
+      'provider' => 'azureblobcli',
+      'options' => {
+        'bucket_name' => bucket_name,
+        'credentials_source' => p('compiled_package_cache.options.credentials_source', 'static'),
+        'storage_account_name' => p('compiled_package_cache.options.storage_account_name', nil),
+        'storage_account_access_key' => p('compiled_package_cache.options.storage_account_access_key', nil),
+      }
+    }
   end
 end
 

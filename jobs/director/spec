@@ -49,6 +49,7 @@ packages:
 - s3cli
 - davcli
 - bosh-gcscli
+- bosh-azureblobcli
 - verify_multidigest
 
 properties:
@@ -336,7 +337,7 @@ properties:
 
   # Blobstore
   blobstore.provider:
-    description: Provider of the blobstore used by director and agent (dav|simple|s3|gcs)
+    description: Provider of the blobstore used by director and agent (dav|simple|s3|gcs|azureblob)
     default: 'dav'
   blobstore.s3_region:
     description: Region of the blobstore used by s3 blobstore plugin
@@ -387,6 +388,10 @@ properties:
     description: Password agent uses to connect to blobstore used by simple blobstore plugin
   blobstore.tls.cert.ca:
     description: CA Cert for TLS communcation with blobstore
+  blobstore.storage_account_name:
+    description: Azure storage_account_name used by azureblob blobstore plugin
+  blobstore.storage_account_access_key:
+    description: Azure storage_account_access_key used by azureblob blobstore plugin
 
   # Blobstore destination for backups
   director.backup_destination:
