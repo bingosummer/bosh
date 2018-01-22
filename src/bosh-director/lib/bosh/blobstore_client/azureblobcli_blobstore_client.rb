@@ -101,7 +101,13 @@ module Bosh::Blobstore
       rescue Exception => e
         raise BlobstoreError, e.inspect
       end
-      raise BlobstoreError, "Failed to create AzureBlob object, code #{status.exitstatus}, output: '#{out}', error: '#{err}'" unless status.success?
+      contents = ""
+      File.open(@config_file, 'r') do |file|
+        file.each_line do |line|
+          contents += line
+        end
+      end
+      raise BlobstoreError, "Failed to create AzureBlob object, code #{status.exitstatus}, output: '#{out}', error: '#{err}'. #{@azureblobcli_path} -c #{@config_file} put #{path} #{oid}. #{contents}" unless status.success?
     end
 
     def full_oid_path(object_id)
